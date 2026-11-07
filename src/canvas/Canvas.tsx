@@ -19,7 +19,7 @@ import { useApp } from '@/state/store'
 import { useTuning } from '@/tuning/store'
 import { toTransition } from '@/tuning/transition'
 import { IDENTITY_INKS, PatternCopies, TileArt } from './PatternArt'
-import { SlotOutlines } from './SlotOutlines'
+import { MASTER_SQUARE, Outline, SlotOutlines } from './SlotOutlines'
 import { useDrop, usePatternPress } from './useCanvasPointer'
 import { useCopyMotion } from './useCopyMotion'
 import { useShiftMotion } from './useShiftMotion'
@@ -263,23 +263,7 @@ export const Canvas = () => {
 
               {/* The intro keeps the border up over the pattern, to show where the tile is */}
               <g ref={border}>
-                <rect
-                  width={1}
-                  height={1}
-                  fill="none"
-                  stroke="white"
-                  strokeWidth={1.5}
-                  vectorEffect="non-scaling-stroke"
-                />
-                <rect
-                  width={1}
-                  height={1}
-                  fill="none"
-                  stroke="black"
-                  strokeWidth={1.5}
-                  strokeDasharray="5 5"
-                  vectorEffect="non-scaling-stroke"
-                />
+                <Outline poly={MASTER_SQUARE} width={1} />
               </g>
 
               <g ref={outlines}>

@@ -4,7 +4,7 @@ import { TEMPLATE_BY_ID, type Point } from '@/pattern/templates'
 
 const pointsOf = (poly: Point[]) => poly.map(([x, y]) => `${x},${y}`).join(' ')
 
-const MASTER_SQUARE: Point[] = [
+export const MASTER_SQUARE: Point[] = [
   [0, 0],
   [1, 0],
   [1, 1],
@@ -12,7 +12,7 @@ const MASTER_SQUARE: Point[] = [
 ]
 
 /** Two strokes, so it shows on any colour. */
-const Outline = ({ poly, width }: { poly: Point[]; width: number }) => (
+export const Outline = ({ poly, width }: { poly: Point[]; width: number }) => (
   <>
     <polygon
       points={pointsOf(poly)}
@@ -58,8 +58,8 @@ export const SlotOutlines = ({
           <Outline poly={polyOf(hover)} width={1} />
         </g>
       )}
-      {selected && <Outline poly={polyOf(selected)} width={2} />}
-      {target && <Outline poly={polyOf(target)} width={2} />}
+      {selected && <Outline poly={polyOf(selected)} width={3} />}
+      {target && <Outline poly={polyOf(target)} width={3} />}
       {target?.kind === 'edge' && (
         <>
           {slots.map((slot, k) => (
