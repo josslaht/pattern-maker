@@ -13,11 +13,21 @@ import type { Design, Shift } from '@/pattern/model'
 import { useTuning } from '@/tuning/store'
 import { toTransition } from '@/tuning/transition'
 
-const sized = (pose: Pose, size: number): Pose => ({
+export const sized = (pose: Pose, size: number): Pose => ({
   rotate: pose.rotate,
   scaleX: pose.scaleX * size,
   scaleY: pose.scaleY * size,
 })
+
+/** Each copy is two `use` elements, patches and shapes. */
+export const copiesIn = (root: SVGSVGElement) => {
+  const copies = new Map<string, Element[]>()
+  root.querySelectorAll('use[data-copy]').forEach((use) => {
+    const key = use.getAttribute('data-copy')!
+    copies.set(key, [...(copies.get(key) ?? []), use])
+  })
+  return copies
+}
 
 /**
  * React has already drawn the copies in their new arrangement. This starts them from where they
@@ -43,12 +53,7 @@ export const useCopyMotion = (
     const root = svg.current
     if (!root) return
 
-    // Each copy is two `use` elements, patches and shapes
-    const copies = new Map<string, Element[]>()
-    root.querySelectorAll('use[data-copy]').forEach((use) => {
-      const key = use.getAttribute('data-copy')!
-      copies.set(key, [...(copies.get(key) ?? []), use])
-    })
+    const copies = copiesIn(root)
 
     const rest = (uses: Element[], i: number, j: number) => {
       moving.current.delete(`${i},${j}`)

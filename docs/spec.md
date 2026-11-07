@@ -223,7 +223,7 @@ The canvas in a rounded frame, with no side panels, so the tile and pattern are 
 
 Every tool is there and usable from the start. Nothing is revealed bit by bit, and there's no tour.
 
-- **Intro:** on every load, saved design or not, the page opens on the whole pattern with nothing in front of it and nothing to touch. The camera then flies into the tile, the header and bar arrive, and the shapes unfold last. With reduced motion it goes straight to the tile.
+- **Intro:** on every load, saved design or not, the page opens on the Pattern view's frame, without its bar and with nothing to touch. The frame fades up with the tile and its border in the middle, and the copies grow out from it, nearest first. The camera then flies into the tile, the header and bar arrive, and the shapes unfold last. With reduced motion it goes straight to the tile.
 - **Starting pattern:** one of a few hand-picked finished patterns, chosen at random, so the first look is a good one. Someone who only looked gets the intro and another pattern next time; anyone who changed something comes back to their own work.
 - **Hints are invitations, not steps.** Each one goes once it's been done, in any order, and what's been done is kept across visits:
 

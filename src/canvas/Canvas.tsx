@@ -25,6 +25,7 @@ import { useCopyMotion } from './useCopyMotion'
 import { useShiftMotion } from './useShiftMotion'
 import { SHOWN_INKS, useShownColours } from './useShownColours'
 import { useIntro } from './useIntro'
+import { useIntroRipple } from './useIntroRipple'
 import { useSlotFlourish } from './useSlotFlourish'
 import { useStageMotion, type Layout, type StageTarget } from './useStageMotion'
 
@@ -149,11 +150,17 @@ export const Canvas = () => {
   const viewport = layout?.stage ?? null
   useSpaceKey()
   const svg = useRef<SVGSVGElement>(null)
-  useIntro()
+  // Tiles from the tile to the frame's corners in the Pattern view, which the ripple has to cross
+  const reach = viewport
+    ? Math.hypot(viewport.width, viewport.height) /
+      2 /
+      (Math.min(viewport.width, viewport.height) * patternShare)
+    : 0
+  useIntro(reach * canvas.introWave)
 
-  // The intro opens on the whole pattern, as if Space were held
+  // The intro opens on the Pattern view, framed like a tap of Space
   const showsPattern = view === 'pattern' || intro === 'looking'
-  const opened = peeking || intro === 'looking'
+  const opened = peeking
 
   // On a phone the tile fills the width and sits above the bar, which is docked at the bottom
   const phone = viewport !== null && viewport.width < PHONE_WIDTH
@@ -199,7 +206,7 @@ export const Canvas = () => {
     return drag && dropTarget ? applyDrop(current, drag.carried, dropTarget) : current
   }, [design, drag, dropTarget])
 
-  const { world, fade, master, outlines, conversions } = useStageMotion(
+  const { world, fade, master, border, outlines, conversions } = useStageMotion(
     target,
     layout,
     layerRef,
@@ -211,6 +218,7 @@ export const Canvas = () => {
   const press = usePatternPress(conversions, shown)
   useDrop(conversions, shown)
   useSlotFlourish(svg)
+  useIntroRipple(svg, layerRef, layout !== null, shown)
   const shiftOnScreen = useShiftMotion(svg, shown)
   useCopyMotion(svg, shown, shiftOnScreen)
 
@@ -251,6 +259,10 @@ export const Canvas = () => {
               <g ref={master}>
                 <rect width={1} height={1} fill={shown.colours[shown.background]} />
                 <TileArt design={shown} optical={optical} bleed={bleed} inks={IDENTITY_INKS} />
+              </g>
+
+              {/* The intro keeps the border up over the pattern, to show where the tile is */}
+              <g ref={border}>
                 <rect
                   width={1}
                   height={1}

@@ -68,7 +68,7 @@ Why things work the way they do. `docs/spec.md` has what the app does.
 
 ## First visit and hints
 
-- Every load starts with a short intro: the whole pattern, then the camera flies into the tile and the tools come in. It shows what the tool makes before asking anything, and that the tile and the pattern are one space.
+- Every load starts with a short intro: the tile appears in its frame, the copies grow out from it into the whole pattern, then the camera flies into the tile and the tools come in. It shows that one tile makes the pattern before asking anything, and that the tile and the pattern are one space.
 - The starting pattern is a random pick from hand-made starters, because a generated one can't be guaranteed to look good. None use Random or Hide some tiles, so the tile you edit always explains the pattern. Pinwheel and Seigaiha keep their variation because that's what they are.
 - Every tool is there from the start. Hints point at things rather than unlock them.
 - Each hint suggests more than one thing, goes once any of it is done and doesn't come back, so you can explore in any order. What you've tried is remembered across visits.

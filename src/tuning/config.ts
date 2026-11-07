@@ -33,7 +33,10 @@ export const tuningConfig = {
     labelFrom: [0.9, 0.5, 1, 0.01],
     tipDelay: [0.6, 0, 2, 0.05],
     selectLabelDelay: [0.8, 0, 3, 0.05],
-    introHold: [0.5, 0, 4, 0.05],
+    // Seconds per tile of distance from the tile, as the intro grows the copies
+    introWave: [0.05, 0, 0.2, 0.005],
+    // Seconds after the ripple settles before the camera flies in
+    introHold: [0, -0.5, 1, 0.05],
     introFlight: [0.5, 0.2, 3, 0.05],
     introArrive: [0.3, 0, 1.5, 0.05],
     // Changes before the hint points at the Pattern view anyway
@@ -72,7 +75,10 @@ export const tuningConfig = {
   },
   motion: {
     camera: { type: 'spring', visualDuration: 0.3, bounce: 0.12 },
-    intro: { type: 'spring', visualDuration: 0.5, bounce: 0.1 },
+    // The intro's fly into the tile. No bounce, so the zoom settles rather than lands
+    intro: { type: 'spring', visualDuration: 0.6, bounce: 0 },
+    introFade: { type: 'spring', visualDuration: 0.25, bounce: 0 },
+    introCopies: { type: 'spring', visualDuration: 0.4, bounce: 0.2 },
     // Holding Space
     focus: { type: 'spring', visualDuration: 0.15, bounce: 0.1 },
     pickUp: { type: 'spring', visualDuration: 0.2, bounce: 0.4 },

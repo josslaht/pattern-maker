@@ -39,6 +39,7 @@ export const useStageMotion = (
   const world = useRef<SVGGElement>(null)
   const fade = useRef<SVGRectElement>(null)
   const master = useRef<SVGGElement>(null)
+  const border = useRef<SVGGElement>(null)
   const outlines = useRef<SVGGElement>(null)
 
   const [values] = useState(() => ({
@@ -133,6 +134,7 @@ export const useStageMotion = (
 
     fade.current?.setAttribute('opacity', String(editing * values.fade.get()))
     master.current?.setAttribute('opacity', String(editing))
+    border.current?.setAttribute('opacity', String(useApp.getState().intro ? focus : editing))
     outlines.current?.setAttribute('opacity', String(editing))
   })
 
@@ -195,5 +197,5 @@ export const useStageMotion = (
     animate(values.logScale, scaleGoal.current, toTransition(motion.saveKick))
   }, [saves, reducedMotion, values])
 
-  return { world, fade, master, outlines, conversions }
+  return { world, fade, master, border, outlines, conversions }
 }
