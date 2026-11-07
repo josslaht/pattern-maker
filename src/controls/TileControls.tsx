@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import { cn } from '@/lib/utils'
 import { useApp } from '@/state/store'
 import { useTuning } from '@/tuning/store'
 import { toTransition } from '@/tuning/transition'
@@ -26,15 +27,23 @@ const useSelectionKeys = () => {
   }, [])
 }
 
-/** `tilePixels` is the tile's size on screen. */
-export const TileControls = ({ visible, tilePixels }: { visible: boolean; tilePixels: number }) => {
+/** Under the tile, or docked at the bottom on a phone. `tileBottom` is in px from the stage's top. */
+export const TileControls = ({
+  visible,
+  tileBottom,
+  phone,
+}: {
+  visible: boolean
+  tileBottom: number
+  phone: boolean
+}) => {
   const { barGap, barSlide } = useTuning((tuning) => tuning.canvas)
   const { panel, focus } = useTuning((tuning) => tuning.motion)
   const peeking = useApp((app) => app.peeking)
-  const edge = `calc(50% + ${tilePixels / 2 + barGap}px)`
   useSelectionKeys()
 
-  const leaving = { opacity: 0, scale: 0.96, y: -barSlide }
+  // Slides towards the edge it came from
+  const leaving = { opacity: 0, scale: 0.96, y: phone ? barSlide : -barSlide }
   // Peeking just fades, without the slide
   const variants = {
     shown: { opacity: 1, scale: 1, y: 0 },
@@ -46,9 +55,13 @@ export const TileControls = ({ visible, tilePixels }: { visible: boolean; tilePi
       {visible && (
         <div
           key="below"
-          className="pointer-events-none absolute inset-x-2 bottom-3 flex items-start justify-center"
+          className={cn(
+            'pointer-events-none absolute inset-x-2 bottom-3 flex justify-center',
+            // Docked, it grows upwards, but never over the header
+            phone ? 'top-16 items-end' : 'items-start',
+          )}
           // Down to the bottom of the frame, so an open drawer can't run off it
-          style={{ top: edge }}
+          style={phone ? undefined : { top: tileBottom + barGap }}
         >
           <motion.div
             className="pointer-events-auto flex max-h-full max-w-full"

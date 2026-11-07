@@ -119,6 +119,31 @@ export const centredCamera = (viewport: Size, share: number, angle = 0): Camera 
   angle,
 })
 
+/** Narrower than this is a phone. Tailwind's `sm`, so the CSS switches at the same width. */
+export const PHONE_WIDTH = 640
+
+/**
+ * On a phone the tile is as wide as fits, leaving `margin` px of the copies at each side,
+ * but no taller than `share` of the height. Its middle sits `middle` of the way down,
+ * above the bar.
+ */
+export const phoneTileCamera = (
+  viewport: Size,
+  margin: number,
+  share: number,
+  middle: number,
+): Camera => {
+  const scale = Math.min(viewport.width - 2 * margin, viewport.height * share)
+  const cy = 0.5 + (viewport.height / 2 - viewport.height * middle) / scale
+  return { cx: 0.5, cy, scale, angle: 0 }
+}
+
+/** Where an upright camera puts the master on the stage, in px from the stage's top. */
+export const tileOnStage = (viewport: Size, camera: Camera) => ({
+  top: viewport.height / 2 - camera.cy * camera.scale,
+  size: camera.scale,
+})
+
 /** In world units. Turned cameras see a turned window, so this is the box around it. */
 export const visibleRect = (screen: Size, stage: Rect, camera: Camera): Rect =>
   turnedBounds(

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   centredCamera,
+  phoneTileCamera,
+  tileOnStage,
   coverRange,
   outputName,
   outputSize,
@@ -177,6 +179,18 @@ describe('the camera', () => {
 
   it('keeps tile size constant whatever the template', () => {
     expect(centredCamera(viewport, 0.3).scale).toBe(240)
+  })
+
+  it('fills a phone’s width with the tile and puts its middle where asked', () => {
+    const phone = { width: 375, height: 812 }
+    const camera = phoneTileCamera(phone, 24, 0.47, 0.4)
+    const tile = tileOnStage(phone, camera)
+    expect(tile.size).toBe(327)
+    expect(tile.top + tile.size / 2).toBeCloseTo(812 * 0.4)
+  })
+
+  it('keeps the tile on a short phone no taller than its share', () => {
+    expect(phoneTileCamera({ width: 375, height: 600 }, 24, 0.47, 0.4).scale).toBeCloseTo(282)
   })
 
   it('centres the output frame on the master tile', () => {

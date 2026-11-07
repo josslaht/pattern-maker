@@ -75,8 +75,9 @@ export const ShapesDrawer = () => {
 
   return (
     // Fits the shapes row, so the slider spans the shapes above it
-    <div className="mx-auto flex w-fit max-w-full flex-col">
-      <div className="flex flex-wrap justify-center">
+    <div className="mx-auto flex w-fit max-w-full flex-col max-sm:w-full">
+      {/* Two even rows on a phone, rather than one long row and a short one */}
+      <div className="flex flex-wrap justify-center max-sm:grid max-sm:grid-cols-5 max-sm:justify-items-center">
         {SHAPES.map((shape) => (
           <TrayShape key={shape.id} shape={shape} />
         ))}
@@ -150,7 +151,7 @@ export const ShapeActions = () => {
 
   return (
     <div className="flex shrink-0 items-center gap-0.5">
-      <span className="mx-2.5 h-5 w-px shrink-0 bg-border max-md:hidden" />
+      <span className="mx-2.5 h-5 w-px shrink-0 bg-border" />
       <ShapeAction
         active={shape !== null && shape.rotations > 1}
         label="Rotate"

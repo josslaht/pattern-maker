@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion, useIsPresent, useReducedMotion } from 'motion/react'
 import { MinusIcon, PlusIcon, XIcon } from 'lucide-react'
 import { savePattern, patternSvg, type FileKind } from '@/canvas/savePattern'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import {
   CUSTOM_RANGE,
   outputSize,
@@ -224,6 +225,8 @@ export const SaveView = () => {
   const message = useApp((app) => app.hint)
   const closeSave = useApp((app) => app.closeSave)
   const { save, canvas, motion: springs } = useTuning()
+  // Lets clicks through while it fades out, so the first click after closing counts
+  const present = useIsPresent()
   const reducedMotion = useReducedMotion()
 
   const [areaRef, area] = useElementSize()
@@ -253,13 +256,16 @@ export const SaveView = () => {
   return (
     <motion.section
       aria-label="Save"
-      className="absolute inset-0 z-20 bg-background p-4"
+      className={cn(
+        'absolute inset-0 z-20 bg-background p-4 max-sm:p-0',
+        !present && 'pointer-events-none',
+      )}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={toTransition(springs.focus)}
     >
-      <div className="grid h-full grid-rows-[minmax(0,1fr)_auto] gap-3 rounded-3xl bg-muted p-3 md:grid-cols-[minmax(0,1fr)_19rem] md:grid-rows-1">
+      <div className="grid h-full grid-rows-[minmax(0,1fr)_auto] gap-3 rounded-3xl bg-muted p-3 max-sm:rounded-none md:grid-cols-[minmax(0,1fr)_19rem] md:grid-rows-1">
         <div className="flex min-h-56 flex-col items-center justify-center gap-1">
           {/* Measured to fit the preview, so the preview can't size it. */}
           <div ref={areaRef} className="relative min-h-0 w-full flex-1">

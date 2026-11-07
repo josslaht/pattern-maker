@@ -5,6 +5,9 @@ export const tuningConfig = {
   canvas: {
     // Share of the canvas's shorter side
     tileShare: [0.47, 0.15, 0.7, 0.01],
+    // On a phone: px of the copies left showing at each side of the tile, and how far down its middle sits
+    phoneTileMargin: [24, 0, 80, 1],
+    phoneTileMiddle: [0.4, 0.25, 0.6, 0.01],
     shapeSizeMin: [0.3, 0.1, 0.6, 0.01],
     shapeSizeMax: [1, 0.6, 1.4, 0.01],
     barGap: [16, 0, 64, 1],

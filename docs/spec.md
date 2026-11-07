@@ -217,7 +217,7 @@ The canvas in a rounded frame, with no side panels, so the tile and pattern are 
 - **Bar at the bottom of the Pattern view:** Shift | Turn | Alternate colours | Hide some tiles, with options a tile can't show left out.
 - **Canvas:** one small hint at a time, dark with light text so it stands out, next to what it's about: centred above the tile in the Tile view, above the bar in the Pattern view, and centred under the header for saving (see First visit). With nothing left to suggest, it only appears for a moment, such as to name a saved file.
 - **Tooltips:** only where an icon or chip doesn't say what it does, using the interface's own tooltip rather than the browser's: "Rotate (R)", "Remove shape", "Click to change background", or "Click to change this slot's background" with a slot selected (neither once it's selected), "Pick a different palette" on Moods, undo and redo, Copy link, the tiles across stepper, Save SVG and Shuffle. Closing the Save view has none: an X says it. The colours, shapes, templates and moods have none: what they look like is enough.
-- **Narrow screens:** still to be designed. Tile, Shapes and Moods drop their labels and the bars wrap for now. Dragging works with touch.
+- **Phones** (narrower than 640 px): no frame round the canvas. The tile is as wide as fits, leaving a strip of the copies at each side, and sits above the tile's bar, which is docked at the bottom like the Pattern view's. Its drawers open above its buttons, so the buttons stay put. Tile, Shapes and Moods keep their labels on one row, with the colours, Turn and Remove on the next. Save drops its label where the header would run out of room. Dragging works with touch.
 
 ## First visit
 

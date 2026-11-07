@@ -4,7 +4,16 @@ import { Hint } from '@/controls/Hint'
 import { PatternControls } from '@/controls/PatternBar'
 import { TileControls } from '@/controls/TileControls'
 import { cn } from '@/lib/utils'
-import { ANGLE, centredCamera, coverRange, visibleRect } from '@/pattern/camera'
+import {
+  ANGLE,
+  centredCamera,
+  coverRange,
+  PHONE_WIDTH,
+  phoneTileCamera,
+  tileOnStage,
+  visibleRect,
+  type Size,
+} from '@/pattern/camera'
 import { applyDrop } from '@/pattern/colours'
 import { useApp } from '@/state/store'
 import { useTuning } from '@/tuning/store'
@@ -41,7 +50,8 @@ const useLayout = () => {
           width: box.width,
           height: box.height,
         },
-        radius: STAGE_RADIUS,
+        // A phone has no frame round the canvas, so no corners either
+        radius: screen.width < PHONE_WIDTH ? 0 : STAGE_RADIUS,
       }
       // A new layout snaps the camera, so keep the old one unless something moved
       setLayout((last) => (JSON.stringify(last) === JSON.stringify(next) ? last : next))
@@ -132,7 +142,7 @@ export const Canvas = () => {
   const toolsOut = intro === null || intro === 'arriving'
 
   const { canvas, optical, motion: springs } = useTuning()
-  const { tileShare, patternShare, bleed, saveFlash } = canvas
+  const { tileShare, patternShare, phoneTileMargin, phoneTileMiddle, bleed, saveFlash } = canvas
   const reducedMotion = useReducedMotion()
 
   const { stageRef, layerRef, layout } = useLayout()
@@ -145,10 +155,17 @@ export const Canvas = () => {
   const showsPattern = view === 'pattern' || intro === 'looking'
   const opened = peeking || intro === 'looking'
 
+  // On a phone the tile fills the width and sits above the bar, which is docked at the bottom
+  const phone = viewport !== null && viewport.width < PHONE_WIDTH
+  const tileCamera = (stage: Size) =>
+    phone
+      ? phoneTileCamera(stage, phoneTileMargin, tileShare, phoneTileMiddle)
+      : centredCamera(stage, tileShare)
+
   const { target, range } = useMemo(() => {
     const stage = layout?.stage ?? { x: 0, y: 0, width: 1, height: 1 }
     const screen = layout?.window ?? stage
-    const tile = centredCamera(stage, tileShare)
+    const tile = tileCamera(stage)
     const pattern = centredCamera(stage, patternShare, design.angled ? ANGLE : 0)
     const goal: StageTarget = showsPattern
       ? { camera: pattern, output: 1 }
@@ -162,7 +179,18 @@ export const Canvas = () => {
         visibleRect(screen, stage, { ...pattern, angle: 0 }),
       ]),
     }
-  }, [layout, tileShare, patternShare, showsPattern, design.angled])
+    // `tileCamera` is new every render, and only changes with what's listed.
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    layout,
+    phone,
+    tileShare,
+    phoneTileMargin,
+    phoneTileMiddle,
+    patternShare,
+    showsPattern,
+    design.angled,
+  ])
 
   useShownColours(design.colours)
 
@@ -185,6 +213,8 @@ export const Canvas = () => {
   useSlotFlourish(svg)
   const shiftOnScreen = useShiftMotion(svg, shown)
   useCopyMotion(svg, shown, shiftOnScreen)
+
+  const tile = viewport ? tileOnStage(viewport, tileCamera(viewport)) : null
 
   return (
     <div ref={stageRef} className="relative h-full min-h-0 select-none">
@@ -268,21 +298,22 @@ export const Canvas = () => {
         )}
       </div>
 
-      {viewport && (
+      {tile && (
         <TileControls
           visible={view === 'tile' && !peeking && toolsOut}
-          tilePixels={centredCamera(viewport, tileShare).scale}
+          tileBottom={tile.top + tile.size}
+          phone={phone}
         />
       )}
 
       <PatternControls visible={view === 'pattern' && !peeking} hint={<Hint at="canvas" />} />
 
       <AnimatePresence initial={false}>
-        {viewport && view === 'tile' && !intro && (
+        {tile && view === 'tile' && !intro && (
           <motion.div
             className="pointer-events-none absolute inset-x-2 flex justify-center"
             style={{
-              bottom: `calc(50% + ${centredCamera(viewport, tileShare).scale / 2 + canvas.barGap}px)`,
+              bottom: `calc(100% - ${tile.top - canvas.barGap}px)`,
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: peeking ? 0 : 1 }}

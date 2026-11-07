@@ -90,13 +90,13 @@ const DrawerButton = ({
         onClick={() => toggleDrawer(drawer)}
       >
         <span className="size-5 shrink-0">{children}</span>
-        <span className="max-md:sr-only">{label}</span>
+        {label}
       </Button>
     </Tip>
   )
 }
 
-const Divider = () => <span className="mx-1 h-5 w-px shrink-0 bg-border max-md:hidden" />
+const Divider = () => <span className="mx-1 h-5 w-px shrink-0 bg-border" />
 
 /** Measures its own height, since browsers can't animate between two `auto` heights. */
 const DrawerBox = ({ drawer }: { drawer: Drawer }) => {
@@ -122,7 +122,11 @@ const DrawerBox = ({ drawer }: { drawer: Drawer }) => {
       transition={toTransition(panel)}
     >
       <div className="flex min-h-0 flex-col overflow-y-auto">
-        <div ref={content} className="shrink-0 p-(--bar-gap) pt-0">
+        {/* On a phone the drawer opens above the buttons, so they stay under the thumb */}
+        <div
+          ref={content}
+          className="shrink-0 p-(--bar-gap) pt-0 max-sm:pt-(--bar-gap) max-sm:pb-0"
+        >
           {/* Resets the bar's `initial={false}`, so the first switch fades too. */}
           <PresenceContext.Provider value={null}>
             <motion.div
@@ -149,11 +153,12 @@ export const TileBar = () => {
 
   return (
     <div
-      className="flex max-h-full w-fit max-w-full flex-col rounded-(--bar-radius) bg-background shadow-md"
+      className="flex max-h-full w-fit max-w-full flex-col rounded-(--bar-radius) bg-background shadow-md max-sm:flex-col-reverse"
       style={BAR_SHAPE}
     >
-      <div className="flex shrink-0 items-center justify-center p-(--bar-gap) max-md:flex-wrap">
-        <div className="flex items-center justify-center gap-(--bar-gap) max-md:flex-wrap">
+      {/* One row, or the drawers above the colours on a phone */}
+      <div className="flex shrink-0 items-center justify-center gap-(--bar-gap) p-(--bar-gap) max-sm:flex-col">
+        <div className="flex items-center gap-(--bar-gap)">
           <DrawerButton drawer="tile" label="Tile">
             <TemplateGlyph
               template={design.template}
@@ -168,9 +173,11 @@ export const TileBar = () => {
           <DrawerButton drawer="moods" label="Moods" tip="Pick a different palette">
             <PaletteIcon className="size-full" />
           </DrawerButton>
-          <ColourDots />
         </div>
-        <ShapeActions />
+        <div className="flex items-center">
+          <ColourDots />
+          <ShapeActions />
+        </div>
       </div>
 
       <AnimatePresence initial={false}>

@@ -16,8 +16,6 @@ const VIEWS: { id: View; name: string }[] = [
   { id: 'pattern', name: 'Pattern' },
 ]
 
-const HEADER_INSET = 12
-
 const COPIED = 'Link copied. Bookmark it or send it on to keep this pattern.'
 
 /** The design goes in the link, so nothing is stored anywhere. */
@@ -50,10 +48,7 @@ export const Header = () => {
 
   return (
     // z-10 so the Save hint can hang over the canvas
-    <header
-      className="pointer-events-none absolute inset-x-6 z-10 flex justify-center"
-      style={{ top: 16 + HEADER_INSET }}
-    >
+    <header className="pointer-events-none absolute inset-x-6 top-7 z-10 flex justify-center max-sm:inset-x-3 max-sm:top-3">
       <h1 className="sr-only">Pattern maker</h1>
 
       <motion.div
@@ -73,9 +68,10 @@ export const Header = () => {
             {copied ? <CheckIcon /> : <LinkIcon />}
           </Button>
         </Tip>
-        <Button size="sm" onClick={openSave}>
+        {/* Just the icon where the header runs out of room */}
+        <Button size="sm" className="max-[380px]:w-8 max-[380px]:px-0" onClick={openSave}>
           <DownloadIcon />
-          Save
+          <span className="max-[380px]:sr-only">Save</span>
         </Button>
         <div className="absolute top-full left-1/2 mt-3 w-max -translate-x-1/2">
           <Hint at="save" />

@@ -37,7 +37,7 @@ Why things work the way they do. `docs/spec.md` has what the app does.
 ## Bars and header
 
 - No side panels. The canvas fills a rounded frame and the controls float on top, so the pattern gets the space.
-- The tile's bar sits under the tile and opens downwards, because a bar above the tile as well as the header made it top heavy.
+- The tile's bar sits under the tile and opens downwards, because a bar above the tile as well as the header made it top heavy. On a phone it's docked at the bottom like the Pattern bar, and opens upwards so the buttons stay under your thumb.
 - Tile is a button that unfolds the templates, because changing template is rare and seven outlines up front is a lot. Drawers stay open until you click away, so you can compare.
 - The five colours are always visible, because trying colours is the most fun part and shouldn't take two clicks.
 - The bar keeps the same corner radius folded or open, because a pill radius that grew with the bar looked like a different thing.
@@ -47,7 +47,8 @@ Why things work the way they do. `docs/spec.md` has what the app does.
 - Tooltips only where an icon doesn't explain itself. Moods get one to name the movement.
 - Tap Space to switch views, hold it to peek. Nothing hides until the press is longer than a tap, otherwise every tap would flicker the tools.
 - Selection and open drawers stay while you look at the pattern, so you can tap Space, look and carry on.
-- Narrow screens aren't designed yet. The bars wrap and the labels drop.
+- On a phone there's no frame round the canvas, because the room matters more than the frame there. The tile is as wide as fits, with a strip of the copies left at each side so you can still see it repeats.
+- Tile, Shapes and Moods keep their labels on a phone, since they still fit. Save only drops its label where the header would otherwise overflow.
 
 ## Pattern view
 

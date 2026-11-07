@@ -17,7 +17,8 @@ const App = () => {
   return (
     <MotionConfig reducedMotion="user">
       <TooltipProvider delay={tipDelay * 1000}>
-        <div className="relative h-full p-4">
+        {/* A frame round the canvas, except on a phone where the room matters more */}
+        <div className="relative h-full p-4 max-sm:p-0">
           {/* Stays as it was under the Save view, so closing it goes straight back. */}
           <div className="contents" inert={saving}>
             <main className="h-full">
