@@ -25,6 +25,8 @@ export type Design = {
   turn: TileTurn
   alternateColours: boolean
   gaps: boolean
+  /** The Pattern view and saved files turn 45°. The master stays upright. */
+  angled: boolean
   shuffle: number
   colours: string[]
   background: number

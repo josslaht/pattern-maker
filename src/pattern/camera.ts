@@ -4,7 +4,45 @@ import type { Design } from './model'
 export type Size = { width: number; height: number }
 export type Rect = { x: number; y: number; width: number; height: number }
 
-export type Camera = { cx: number; cy: number; scale: number }
+/** `angle` is degrees clockwise around (cx, cy). */
+export type Camera = { cx: number; cy: number; scale: number; angle: number }
+
+/** How far an angled pattern turns. */
+export const ANGLE = 45
+
+const MASTER_CENTRE = { x: 0.5, y: 0.5 }
+
+/** The box around `rect` once it turns `degrees` around `centre`. */
+export const turnedBounds = (rect: Rect, degrees: number, centre = MASTER_CENTRE): Rect => {
+  const radians = (degrees * Math.PI) / 180
+  const cos = Math.cos(radians)
+  const sin = Math.sin(radians)
+  const corners = [
+    [rect.x, rect.y],
+    [rect.x + rect.width, rect.y],
+    [rect.x, rect.y + rect.height],
+    [rect.x + rect.width, rect.y + rect.height],
+  ].map(([x, y]) => [
+    centre.x + (x - centre.x) * cos - (y - centre.y) * sin,
+    centre.y + (x - centre.x) * sin + (y - centre.y) * cos,
+  ])
+  const xs = corners.map(([x]) => x)
+  const ys = corners.map(([, y]) => y)
+  const x = Math.min(...xs)
+  const y = Math.min(...ys)
+  return { x, y, width: Math.max(...xs) - x, height: Math.max(...ys) - y }
+}
+
+/** [across, down] in tiles. Turned 45°, the square block's side is √2 times the longer repeat. */
+const repeatSides = (design: Design): [number, number] => {
+  const [across, down] = repeatBlock(design)
+  if (!design.angled) return [across, down]
+  const side = Math.SQRT2 * lcm(across, down)
+  return [side, side]
+}
+
+const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a)
+const lcm = (a: number, b: number) => (a * b) / gcd(a, b)
 
 export type LayoutId = 'phone' | 'tablet' | 'desktop' | 'square' | 'a4' | 'tile' | 'custom'
 
@@ -32,8 +70,11 @@ export const outputFrame = (
 ): Rect => {
   const size = layoutSize(layout, custom)
   if (!size) {
-    const [width, height] = repeatBlock(design)
-    return { x: 0, y: 0, width, height }
+    const [width, height] = repeatSides(design)
+    // Centred like the others, since an angled pattern turns around the master's centre
+    return design.angled
+      ? { x: 0.5 - width / 2, y: 0.5 - height / 2, width, height }
+      : { x: 0, y: 0, width, height }
   }
   // Centred on the master tile, so opposite edges crop the same
   const height = (across * size.height) / size.width
@@ -46,8 +87,11 @@ const REPEAT_TILE_PIXELS = 512
 export const outputSize = (design: Design, layout: LayoutId, custom?: Size): Size => {
   const size = layoutSize(layout, custom)
   if (size) return size
-  const [across, down] = repeatBlock(design)
-  return { width: across * REPEAT_TILE_PIXELS, height: down * REPEAT_TILE_PIXELS }
+  const [across, down] = repeatSides(design)
+  return {
+    width: Math.round(across * REPEAT_TILE_PIXELS),
+    height: Math.round(down * REPEAT_TILE_PIXELS),
+  }
 }
 
 /** Like pattern-phone-wallpaper.png or pattern-repeat-tile-2x2.svg. */
@@ -63,22 +107,30 @@ export const outputName = (
     return `pattern-${slug}-${size.width}x${size.height}.${extension}`
   if (size) return `pattern-${slug}.${extension}`
   const [across, down] = repeatBlock(design)
-  return `pattern-${slug}-${across}x${down}.${extension}`
+  const angled = design.angled ? '-angled' : ''
+  return `pattern-${slug}-${across}x${down}${angled}.${extension}`
 }
 
 /** Both views centre the master, so switching is one zoom. `share` is of the shorter side. */
-export const centredCamera = (viewport: Size, share: number): Camera => ({
+export const centredCamera = (viewport: Size, share: number, angle = 0): Camera => ({
   cx: 0.5,
   cy: 0.5,
   scale: Math.min(viewport.width, viewport.height) * share,
+  angle,
 })
 
-export const visibleRect = (screen: Size, stage: Rect, camera: Camera): Rect => ({
-  x: camera.cx - (stage.x + stage.width / 2) / camera.scale,
-  y: camera.cy - (stage.y + stage.height / 2) / camera.scale,
-  width: screen.width / camera.scale,
-  height: screen.height / camera.scale,
-})
+/** In world units. Turned cameras see a turned window, so this is the box around it. */
+export const visibleRect = (screen: Size, stage: Rect, camera: Camera): Rect =>
+  turnedBounds(
+    {
+      x: camera.cx - (stage.x + stage.width / 2) / camera.scale,
+      y: camera.cy - (stage.y + stage.height / 2) / camera.scale,
+      width: screen.width / camera.scale,
+      height: screen.height / camera.scale,
+    },
+    -camera.angle,
+    { x: camera.cx, y: camera.cy },
+  )
 
 export type TileRange = { i0: number; i1: number; j0: number; j1: number }
 

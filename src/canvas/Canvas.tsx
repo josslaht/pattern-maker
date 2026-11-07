@@ -4,7 +4,7 @@ import { Hint } from '@/controls/Hint'
 import { PatternControls } from '@/controls/PatternBar'
 import { TileControls } from '@/controls/TileControls'
 import { cn } from '@/lib/utils'
-import { centredCamera, coverRange, visibleRect } from '@/pattern/camera'
+import { ANGLE, centredCamera, coverRange, visibleRect } from '@/pattern/camera'
 import { applyDrop } from '@/pattern/colours'
 import { useApp } from '@/state/store'
 import { useTuning } from '@/tuning/store'
@@ -149,16 +149,20 @@ export const Canvas = () => {
     const stage = layout?.stage ?? { x: 0, y: 0, width: 1, height: 1 }
     const screen = layout?.window ?? stage
     const tile = centredCamera(stage, tileShare)
-    const pattern = centredCamera(stage, patternShare)
+    const pattern = centredCamera(stage, patternShare, design.angled ? ANGLE : 0)
     const goal: StageTarget = showsPattern
       ? { camera: pattern, output: 1 }
       : { camera: tile, output: 0 }
     return {
       target: goal,
-      // Covers both ends of the camera move
-      range: coverRange([visibleRect(screen, stage, tile), visibleRect(screen, stage, pattern)]),
+      // Covers both ends of the camera move, and the turn between them
+      range: coverRange([
+        visibleRect(screen, stage, tile),
+        visibleRect(screen, stage, pattern),
+        visibleRect(screen, stage, { ...pattern, angle: 0 }),
+      ]),
     }
-  }, [layout, tileShare, patternShare, showsPattern])
+  }, [layout, tileShare, patternShare, showsPattern, design.angled])
 
   useShownColours(design.colours)
 

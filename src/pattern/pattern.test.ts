@@ -6,6 +6,7 @@ import {
   outputSize,
   LAYOUTS,
   outputFrame,
+  turnedBounds,
   visibleRect,
   type LayoutId,
 } from './camera'
@@ -228,7 +229,56 @@ describe('the camera', () => {
   it('sees the whole window around a stage set into it, with the camera on the stage', () => {
     const screen = { width: 1000, height: 800 }
     const stage = { x: 100, y: 200, width: 400, height: 400 }
-    const visible = visibleRect(screen, stage, { cx: 0.5, cy: 0.5, scale: 100 })
+    const visible = visibleRect(screen, stage, { cx: 0.5, cy: 0.5, scale: 100, angle: 0 })
     expect(visible).toEqual({ x: -2.5, y: -3.5, width: 10, height: 8 })
+  })
+
+  it('sees more of the world when the camera turns', () => {
+    const stage = { x: 0, y: 0, width: 100, height: 100 }
+    const camera = { cx: 0.5, cy: 0.5, scale: 100, angle: 45 }
+    const visible = visibleRect(stage, stage, camera)
+    expect(visible.width).toBeCloseTo(Math.SQRT2)
+    expect(visible.x + visible.width / 2).toBeCloseTo(0.5)
+  })
+
+  it('turns a box around the master centre', () => {
+    const box = turnedBounds({ x: 0, y: 0, width: 1, height: 1 }, 90)
+    expect(box.x).toBeCloseTo(0)
+    expect(box.width).toBeCloseTo(1)
+  })
+})
+
+describe('an angled pattern', () => {
+  const angled = (design: Design): Design => ({ ...design, angled: true })
+
+  it('turns only the copies, never the drop maths', () => {
+    expect(copyAt(angled(FIRST_LOAD), 1, 1)).toEqual(copyAt(FIRST_LOAD, 1, 1))
+  })
+
+  // One step across the file, turned back into the world, must land on a whole repeat block
+  it('repeats its tile along both sides of the file', () => {
+    for (const design of Object.values(SAMPLES).map(angled)) {
+      const [across, down] = repeatBlock(design)
+      const frame = outputFrame(design, 'tile', 1)
+      expect(frame.width).toBeCloseTo(frame.height)
+      const step = frame.width / Math.SQRT2
+      for (const along of [step, -step]) {
+        expect(Number.isInteger(Math.round(along * 1e9) / 1e9 / across)).toBe(true)
+        expect(Number.isInteger(Math.round(along * 1e9) / 1e9 / down)).toBe(true)
+      }
+    }
+  })
+
+  it('centres its repeat tile on the master, which it turns around', () => {
+    const frame = outputFrame(angled(SAMPLES.Pinwheel), 'tile', 1)
+    expect(frame.x + frame.width / 2).toBeCloseTo(0.5)
+    expect(frame.width).toBeCloseTo(2 * Math.SQRT2)
+  })
+
+  it('saves a repeat tile in whole pixels and says it is angled', () => {
+    expect(outputSize(angled(FIRST_LOAD), 'tile')).toEqual({ width: 724, height: 724 })
+    expect(outputName(angled(SAMPLES.Pinwheel), 'tile', 'svg')).toBe(
+      'pattern-repeat-tile-2x2-angled.svg',
+    )
   })
 })

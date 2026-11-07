@@ -26,6 +26,7 @@ const sample = (
   turn: 'none',
   alternateColours: false,
   gaps: false,
+  angled: false,
   shuffle: 7,
   colours: MOODS[mood].colours,
   background: 0,

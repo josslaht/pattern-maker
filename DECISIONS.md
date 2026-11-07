@@ -55,6 +55,8 @@ Why things work the way they do. `docs/spec.md` has what the app does.
 - Shift and Turn are labelled options rather than thumbnails, because thumbnails of your own tile all looked the same and the pattern is already the preview.
 - Turn is None, Pinwheel, Mirror and Random. Alternate is gone because it mostly looked like Pinwheel.
 - "Alternate colours" and "Hide some tiles", because "Hide tiles" sounded like all of them.
+- Angle pattern turns the whole pattern 45°. Only 45°, because other angles look like mistakes.
+- No button to turn the whole tile. With every copy turning with it, it only rotates the pattern you already have.
 - Options that wouldn't change anything are hidden, including ones that look the same as an earlier option, because a control that does nothing looks broken.
 - A chosen option stays chosen when the tile stops showing it, so changing the tile back brings it back.
 - Shuffle is a small dice next to what it re-rolls, and clicking Random again re-rolls too. The space for the dice is always there so nothing jumps.

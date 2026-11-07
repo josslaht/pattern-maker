@@ -129,6 +129,8 @@ export const Segmented = <Id extends string>({
   )
 }
 
+const Divider = () => <span className="h-4 w-px bg-border max-sm:hidden" />
+
 const SwitchRow = ({
   label,
   checked,
@@ -149,7 +151,8 @@ const SwitchRow = ({
 /** Leaves out options this tile can't show. */
 const PatternBar = () => {
   const design = useApp((app) => app.design)
-  const { setShift, setTurn, setAlternateColours, setGaps, reshuffle } = useApp.getState()
+  const { setShift, setTurn, setAlternateColours, setGaps, setAngled, reshuffle } =
+    useApp.getState()
   const useful = useMemo(() => usefulVariations(design), [design])
 
   const shape = 'flex max-w-full rounded-(--bar-radius) bg-background shadow-md'
@@ -175,30 +178,35 @@ const PatternBar = () => {
           onShuffle={reshuffle}
         />
       )}
-      <div className="flex items-center justify-between gap-6">
+      <div className="flex flex-wrap items-center justify-between gap-x-2 max-sm:flex-col max-sm:items-stretch">
         {useful.alternateColours && (
-          <SwitchRow
-            label="Alternate colours"
-            checked={design.alternateColours}
-            onChange={setAlternateColours}
-          />
+          <>
+            <SwitchRow
+              label="Alternate colours"
+              checked={design.alternateColours}
+              onChange={setAlternateColours}
+            />
+            <Divider />
+          </>
         )}
         <div className="relative">
           <SwitchRow
             label="Hide some tiles"
             checked={design.gaps}
             onChange={setGaps}
-            className="gap-10"
+            className="gap-8"
           />
           {/* Outside the label, which would take the button's clicks. */}
-          <PopIn shown={design.gaps} className="absolute top-0 right-11 inline-flex">
+          <PopIn shown={design.gaps} className="absolute top-1 right-11 inline-flex">
             <Tip text="Shuffle">
-              <Button variant="ghost" size="icon-sm" aria-label="Shuffle" onClick={reshuffle}>
+              <Button variant="ghost" size="icon-xs" aria-label="Shuffle" onClick={reshuffle}>
                 <Dice />
               </Button>
             </Tip>
           </PopIn>
         </div>
+        <Divider />
+        <SwitchRow label="Angle pattern" checked={design.angled} onChange={setAngled} />
       </div>
     </div>
   )

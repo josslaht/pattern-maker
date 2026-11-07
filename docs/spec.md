@@ -158,6 +158,7 @@ Variation changes copies of the tile across the pattern, never the master. Every
 
 - **Alternate colours:** on checkerboard copies, inks swap in pairs (2 ↔ 3, 4 ↔ 5). Same five colours, more complex look.
 - **Hide some tiles:** 3 of every 16 copies are removed, seeded, so the background shows through.
+- **Angle pattern:** the whole pattern turns 45° in the Pattern view and in saved files, so the grid runs diagonally. The Tile view stays upright, and switching views swings the camera round. Only 45°: other angles look like mistakes.
 - **Shuffle:** picks a new seed. Clicking Random again does it, and Hide some tiles has a dice beside its switch while it's on.
 
 **Seamless randomness.** Random choices repeat over a 4 × 4 block of tiles rather than being truly random, so the pattern still tiles perfectly and the repeat-tile file stays valid.
@@ -205,7 +206,7 @@ There is one canvas with two zoom levels, Tile and Pattern. Moving between them 
 
 - **Density** is set as tiles across the frame (1 to 16) with a stepper, whatever the template. Tile size = frame width ÷ tiles across.
 - **Edges:** the pattern is centred on a tile at the frame's centre, so opposite edges cut the same way and the crop looks intentional.
-- **Repeat tile** saves the smallest block that tiles seamlessly, which grows with settings: 1 × 1 by default; 1 × 2 with Rows shifted; 2 × 1 with Columns shifted; at least 2 × 2 with Pinwheel, Mirror or Alternate colours; 4 × 4 with Random or Hide some tiles. The file name says which block size it is.
+- **Repeat tile** saves the smallest block that tiles seamlessly, which grows with settings: 1 × 1 by default; 1 × 2 with Rows shifted; 2 × 1 with Columns shifted; at least 2 × 2 with Pinwheel, Mirror or Alternate colours; 4 × 4 with Random or Hide some tiles. Angled, it is a square √2 times the longer side of that block, centred on the master. The file name says which block size it is, and whether it is angled.
 
 ## Interface layout
 

@@ -1,8 +1,10 @@
 import {
+  ANGLE,
   coverRange,
   outputName,
   outputSize,
   outputFrame,
+  turnedBounds,
   type Rect,
   type Size,
 } from '@/pattern/camera'
@@ -19,6 +21,7 @@ export const patternSvg = async (design: Design, frame: Rect, size: Size) => {
   const { renderToStaticMarkup } = await import('react-dom/server')
   const { canvas, optical } = useTuning.getState()
   const pixelsPerTile = size.width / frame.width
+  const angle = design.angled ? ANGLE : 0
 
   return renderToStaticMarkup(
     <svg
@@ -32,13 +35,15 @@ export const patternSvg = async (design: Design, frame: Rect, size: Size) => {
         <rect {...frame} />
       </clipPath>
       <g clipPath="url(#frame)">
-        <PatternCopies
-          design={design}
-          optical={optical}
-          bleed={canvas.bleed / pixelsPerTile}
-          forFile
-          range={coverRange([frame], 1)}
-        />
+        <g transform={angle ? `rotate(${angle} 0.5 0.5)` : undefined}>
+          <PatternCopies
+            design={design}
+            optical={optical}
+            bleed={canvas.bleed / pixelsPerTile}
+            forFile
+            range={coverRange([turnedBounds(frame, -angle)], 1)}
+          />
+        </g>
       </g>
     </svg>,
   )

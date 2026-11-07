@@ -27,6 +27,7 @@ describe('reading a saved design', () => {
       turn: 'scatter',
       alternateColours: true,
       gaps: true,
+      angled: true,
       shuffle: 12,
       colours: ['#ABCDEF', '#000000', '#ffffff', '#123456', '#fedcba'],
       background: 4,
@@ -66,9 +67,15 @@ describe('reading a saved design', () => {
   )
 
   it('refuses a design missing anything', () => {
-    for (const key of Object.keys(FIRST_LOAD)) {
+    for (const key of Object.keys(FIRST_LOAD).filter((key) => key !== 'angled')) {
       expect(savedWith({ [key]: undefined })).toBeNull()
     }
+  })
+
+  it('opens a design from before the angle switch straight', () => {
+    const { angled: _, ...old } = { ...FIRST_LOAD, angled: true }
+    expect(saved(old)?.angled).toBe(false)
+    expect(savedWith({ angled: 'yes' })).toBeNull()
   })
 
   it('refuses a tile and shapes it can not draw', () => {

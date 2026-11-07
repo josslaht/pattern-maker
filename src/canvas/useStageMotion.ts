@@ -46,6 +46,7 @@ export const useStageMotion = (
     cy: motionValue(0.5),
     // Log so zooming out doesn't rush at the wide end
     logScale: motionValue(0),
+    angle: motionValue(0),
     output: motionValue(0),
     focus: motionValue(focused ? 1 : 0),
     fade: motionValue(useTuning.getState().canvas.copyFade),
@@ -67,23 +68,29 @@ export const useStageMotion = (
       return { ...box, x: svgRect.left + box.x, y: svgRect.top + box.y }
     }
     const scale = () => Math.exp(values.logScale.get())
+    const turn = (x: number, y: number, degrees: number): Point => {
+      const radians = (degrees * Math.PI) / 180
+      const cos = Math.cos(radians)
+      const sin = Math.sin(radians)
+      return [x * cos - y * sin, x * sin + y * cos]
+    }
     return {
       scale,
       toWorld: (clientX, clientY) => {
         const rect = stage()
         if (!rect) return [0, 0]
-        return [
-          (clientX - rect.x - rect.width / 2) / scale() + values.cx.get(),
-          (clientY - rect.y - rect.height / 2) / scale() + values.cy.get(),
-        ]
+        const [x, y] = turn(
+          clientX - rect.x - rect.width / 2,
+          clientY - rect.y - rect.height / 2,
+          -values.angle.get(),
+        )
+        return [x / scale() + values.cx.get(), y / scale() + values.cy.get()]
       },
-      toScreen: ([x, y]) => {
+      toScreen: ([worldX, worldY]) => {
         const rect = stage()
         if (!rect) return [0, 0]
-        return [
-          (x - values.cx.get()) * scale() + rect.x + rect.width / 2,
-          (y - values.cy.get()) * scale() + rect.y + rect.height / 2,
-        ]
+        const [x, y] = turn(worldX - values.cx.get(), worldY - values.cy.get(), values.angle.get())
+        return [x * scale() + rect.x + rect.width / 2, y * scale() + rect.y + rect.height / 2]
       },
       isOver: (clientX, clientY) => {
         const rect = stage()
@@ -104,9 +111,12 @@ export const useStageMotion = (
     const { window, stage, radius } = current
 
     const scale = Math.exp(values.logScale.get())
-    const x = stage.x + stage.width / 2 - values.cx.get() * scale
-    const y = stage.y + stage.height / 2 - values.cy.get() * scale
-    world.current?.setAttribute('transform', `translate(${x} ${y}) scale(${scale})`)
+    const x = stage.x + stage.width / 2
+    const y = stage.y + stage.height / 2
+    world.current?.setAttribute(
+      'transform',
+      `translate(${x} ${y}) rotate(${values.angle.get()}) scale(${scale}) translate(${-values.cx.get()} ${-values.cy.get()})`,
+    )
 
     const focus = clamp01(values.focus.get())
     const top = stage.y * focus
@@ -139,6 +149,7 @@ export const useStageMotion = (
     cx: target.camera.cx,
     cy: target.camera.cy,
     logScale: Math.log(target.camera.scale),
+    angle: target.camera.angle,
     output: target.output,
   }
 

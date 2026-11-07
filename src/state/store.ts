@@ -107,6 +107,7 @@ type AppState = {
   setTurn: (turn: TileTurn) => void
   setAlternateColours: (alternateColours: boolean) => void
   setGaps: (gaps: boolean) => void
+  setAngled: (angled: boolean) => void
   reshuffle: () => void
 
   beginDrag: (carried: Carried, origin: Landing) => void
@@ -279,6 +280,8 @@ export const useApp = create<AppState>((set, get) => ({
     set((state) => change(state, { ...state.design, alternateColours })),
 
   setGaps: (gaps) => set((state) => change(state, { ...state.design, gaps })),
+
+  setAngled: (angled) => set((state) => change(state, { ...state.design, angled })),
 
   reshuffle: () =>
     set((state) => change(state, { ...state.design, shuffle: state.design.shuffle + 1 })),

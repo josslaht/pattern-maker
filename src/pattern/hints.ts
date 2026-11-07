@@ -43,6 +43,7 @@ const repeatOf = (design: Design) => [
   design.turn,
   design.alternateColours,
   design.gaps,
+  design.angled,
   design.shuffle,
 ]
 

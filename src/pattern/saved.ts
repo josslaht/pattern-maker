@@ -26,6 +26,7 @@ const isDesign = (design: Design) =>
   TILE_TURNS.includes(design.turn) &&
   typeof design.alternateColours === 'boolean' &&
   typeof design.gaps === 'boolean' &&
+  typeof design.angled === 'boolean' &&
   Number.isInteger(design.shuffle) &&
   design.colours.length === 5 &&
   design.colours.every((colour) => /^#[0-9a-f]{6}$/i.test(colour)) &&
@@ -50,7 +51,12 @@ const renamed = (saved: object, names: Record<string, string>) =>
 
 const withNewNames = (saved: object) => {
   const design = renamed(saved, OLD_NAMES)
-  return { ...design, fills: design.fills.map((fill: object) => renamed(fill, OLD_FILL_NAMES)) }
+  // Designs from before the angle switch are straight
+  return {
+    angled: false,
+    ...design,
+    fills: design.fills.map((fill: object) => renamed(fill, OLD_FILL_NAMES)),
+  }
 }
 
 /** Null if this version can't draw it, since a bad design would break every visit. */
