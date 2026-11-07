@@ -103,6 +103,7 @@ Why things work the way they do. `docs/spec.md` has what the app does.
 - Copies move into a new arrangement in a wave from the tile in focus. Turns rotate, mirrors flip, hidden tiles shrink away and swapped colours pop.
 - Animations carry on from where things are on screen, not from where they were heading, because restarting made tiles jump.
 - Holding Space is quick with no bounce, because it's a glance.
+- Switching between Tile and Pattern has no bounce. A zoom that overshoots and comes back looks like a bug, not like play.
 - A dropped colour blooms where you let go, since paint has nowhere to fly to.
 
 ## How it's built

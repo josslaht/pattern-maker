@@ -74,7 +74,8 @@ export const tuningConfig = {
     arch: [1, 0.3, 1.2, 0.01],
   },
   motion: {
-    camera: { type: 'spring', visualDuration: 0.3, bounce: 0.12 },
+    // Switching Tile and Pattern. No bounce: an overshooting zoom reads as a glitch
+    camera: { type: 'spring', visualDuration: 0.3, bounce: 0 },
     // The intro's fly into the tile. No bounce, so the zoom settles rather than lands
     intro: { type: 'spring', visualDuration: 0.6, bounce: 0 },
     introFade: { type: 'spring', visualDuration: 0.25, bounce: 0 },
