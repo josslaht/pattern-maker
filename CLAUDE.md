@@ -10,7 +10,6 @@ A pattern maker for people with no pattern vocabulary.
 
 1. **Looking matters more than engineering.** Scale, spacing, colour, what happens where it repeats, and which controls deserve to exist. When in doubt, leave a control out.
 2. **It should feel playful.** Motion and interaction design are a main part of the product, not polish for the end. Treat every pick up, hover, drop, snap and camera move as a design decision. Direct manipulation beats controls wherever it stays obvious.
-3. **Joosep should be able to explain every line.** Keep it small, plain and hand-written. Comment only what the code can't say, in a line where possible. Avoid clever abstractions and new dependencies unless they clearly earn it.
 
 ## Stack
 
