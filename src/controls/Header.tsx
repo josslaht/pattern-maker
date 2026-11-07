@@ -48,7 +48,7 @@ export const Header = () => {
 
   return (
     // z-10 so the Save hint can hang over the canvas
-    <header className="pointer-events-none absolute inset-x-6 top-7 z-10 flex justify-center max-sm:inset-x-3 max-sm:top-3">
+    <header className="pointer-events-none absolute inset-x-6 top-7 z-10 flex justify-center max-sm:inset-x-3 max-sm:top-[calc(0.75rem+env(safe-area-inset-top,0px))]">
       <h1 className="sr-only">Pattern maker</h1>
 
       <motion.div

@@ -15,7 +15,8 @@ const HINTS: Record<HintId, ReactNode> = {
         Tap Space or use the buttons above to see the whole pattern. Or hold Space to preview it.
       </span>
       <span className="hidden pointer-coarse:inline">
-        Use the buttons above to see the whole pattern.
+        Tap beside the tile or use the buttons above to see the whole pattern. Or hold a finger down
+        to preview it.
       </span>
     </>
   ),

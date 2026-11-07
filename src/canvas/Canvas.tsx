@@ -225,7 +225,8 @@ export const Canvas = () => {
             ref={svg}
             className={cn(
               'absolute inset-0 block size-full',
-              'touch-none',
+              // The canvas owns every touch, and a held finger peeks rather than popping a callout
+              'touch-none [-webkit-touch-callout:none]',
               intro && 'pointer-events-none',
             )}
             width={layout.window.width}

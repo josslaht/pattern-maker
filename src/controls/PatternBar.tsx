@@ -228,7 +228,7 @@ export const PatternControls = ({ visible, hint }: { visible: boolean; hint: Rea
       {visible && (
         <div
           key="bar"
-          className="pointer-events-none absolute inset-x-2 bottom-3 flex justify-center"
+          className="pointer-events-none absolute inset-x-2 flex justify-center bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))]"
         >
           <motion.div
             className="flex max-w-full flex-col items-center gap-2"

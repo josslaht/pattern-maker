@@ -14,6 +14,8 @@ export const tuningConfig = {
     barSlide: [16, 0, 64, 1],
     // Seconds. Shorter is a tap, longer is a peek
     spaceTap: [0.15, 0.1, 0.6, 0.01],
+    // Seconds a finger rests on the canvas before it peeks, like holding Space
+    touchHold: [0.3, 0.15, 0.8, 0.01],
     trayShape: [34, 16, 48, 1],
     dragLift: [1.35, 1, 2, 0.01],
     dragLiftOverTarget: [0.9, 0.4, 1.5, 0.01],

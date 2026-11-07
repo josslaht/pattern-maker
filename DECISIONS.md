@@ -47,6 +47,7 @@ Why things work the way they do. `docs/spec.md` has what the app does.
 - Tooltips only where an icon doesn't explain itself. Moods get one to name the movement.
 - Tap Space to switch views, hold it to peek. Nothing hides until the press is longer than a tap, otherwise every tap would flicker the tools.
 - Selection and open drawers stay while you look at the pattern, so you can tap Space, look and carry on.
+- On touch the canvas is the Space key: a tap beside the tile or anywhere on the pattern switches views, and a held finger peeks. A tap on the tile still selects, and a tap away drops the selection before it switches, so a stray tap never loses your place.
 - On a phone there's no frame round the canvas, because the room matters more than the frame there. The tile is as wide as fits, with a strip of the copies left at each side so you can still see it repeats.
 - Tile, Shapes and Moods keep their labels on a phone, since they still fit. Save only drops its label where the header would otherwise overflow.
 
@@ -74,7 +75,7 @@ Why things work the way they do. `docs/spec.md` has what the app does.
 - The last hint suggests saving, under the Save button, once you've changed the repeat. It goes when Save is opened or after a few more changes, so it doesn't hang around.
 - Hints are dark pills next to what they're about, because in a corner they read as small print.
 - Resting on the tile says a click selects the slot, until you've clicked one.
-- No Space hint on touch screens, since there's no Space key.
+- On touch screens the look hint talks about tapping and holding instead of Space.
 
 ## Saving
 

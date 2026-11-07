@@ -56,9 +56,9 @@ export const TileControls = ({
         <div
           key="below"
           className={cn(
-            'pointer-events-none absolute inset-x-2 bottom-3 flex justify-center',
+            'pointer-events-none absolute inset-x-2 flex justify-center bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))]',
             // Docked, it grows upwards, but never over the header
-            phone ? 'top-16 items-end' : 'items-start',
+            phone ? 'top-[calc(4rem+env(safe-area-inset-top,0px))] items-end' : 'items-start',
           )}
           // Down to the bottom of the frame, so an open drawer can't run off it
           style={phone ? undefined : { top: tileBottom + barGap }}

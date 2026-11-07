@@ -121,7 +121,7 @@ const DrawerBox = ({ drawer }: { drawer: Drawer }) => {
       exit={{ height: 0, opacity: 0 }}
       transition={toTransition(panel)}
     >
-      <div className="flex min-h-0 flex-col overflow-y-auto">
+      <div className="flex min-h-0 flex-col overflow-y-auto overscroll-contain">
         {/* On a phone the drawer opens above the buttons, so they stay under the thumb */}
         <div
           ref={content}

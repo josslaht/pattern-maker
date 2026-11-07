@@ -98,7 +98,17 @@ export const useDrop = (stage: StageConversions, shown: Design) => {
 export const usePatternPress = (stage: StageConversions, shown: Design) => {
   const [hover, setHover] = useState<Selection | null>(null)
   const pressed = useRef(false)
+  // On touch, a finger held past a tap peeks at the pattern, as holding Space does
+  const holdTimer = useRef<number | undefined>(undefined)
+  const held = useRef(false)
   const view = useApp((app) => app.view)
+
+  const stopHold = () => {
+    window.clearTimeout(holdTimer.current)
+    if (held.current) useApp.getState().setPeeking(false)
+    held.current = false
+  }
+  useEffect(() => stopHold, [])
 
   // After a pause on a slot, say that a click selects it, until one has been clicked.
   useEffect(() => {
@@ -131,6 +141,14 @@ export const usePatternPress = (stage: StageConversions, shown: Design) => {
     trackPointer(event)
     setHover(null)
     pressed.current = true
+
+    if (event.pointerType !== 'touch') return
+    const hold = useTuning.getState().canvas.touchHold
+    holdTimer.current = window.setTimeout(() => {
+      if (useApp.getState().drag) return
+      held.current = true
+      useApp.getState().setPeeking(true)
+    }, hold * 1000)
   }
 
   const onPointerMove = (event: ReactPointerEvent<SVGSVGElement>) => {
@@ -146,17 +164,24 @@ export const usePatternPress = (stage: StageConversions, shown: Design) => {
   const onPointerUp = (event: ReactPointerEvent<SVGSVGElement>) => {
     if (!pressed.current) return
     pressed.current = false
+    const wasHeld = held.current
+    stopHold()
+    if (wasHeld) return
 
-    const { view, select, deselect } = useApp.getState()
-    if (view !== 'tile') return
+    const { view, selected, select, deselect, setView } = useApp.getState()
+    // Touch has no Space, so a tap away from the tile switches views. The selection goes first.
+    const touch = event.pointerType === 'touch'
+    if (view !== 'tile') return touch ? setView('tile') : undefined
 
     const part = partAt(event)
     if (part) select(part)
+    else if (touch && !selected) setView('pattern')
     else deselect()
   }
 
   const onPointerCancel = () => {
     pressed.current = false
+    stopHold()
   }
 
   const onPointerLeave = () => setHover(null)

@@ -265,7 +265,7 @@ export const SaveView = () => {
       exit={{ opacity: 0 }}
       transition={toTransition(springs.focus)}
     >
-      <div className="grid h-full grid-rows-[minmax(0,1fr)_auto] gap-3 rounded-3xl bg-muted p-3 max-sm:rounded-none md:grid-cols-[minmax(0,1fr)_19rem] md:grid-rows-1">
+      <div className="grid h-full grid-rows-[minmax(0,1fr)_auto] gap-3 rounded-3xl bg-muted p-3 max-sm:rounded-none max-sm:pt-[calc(0.75rem+env(safe-area-inset-top,0px))] max-sm:pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] md:grid-cols-[minmax(0,1fr)_19rem] md:grid-rows-1">
         <div className="flex min-h-56 flex-col items-center justify-center gap-1">
           {/* Measured to fit the preview, so the preview can't size it. */}
           <div ref={areaRef} className="relative min-h-0 w-full flex-1">
@@ -322,7 +322,7 @@ export const SaveView = () => {
           </div>
         </div>
 
-        <div className="flex max-h-full min-h-0 flex-col gap-5 self-start overflow-y-auto rounded-2xl bg-background/60 p-4">
+        <div className="flex max-h-full min-h-0 flex-col gap-5 self-start overflow-y-auto overscroll-contain rounded-2xl bg-background/60 p-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium">Save</h2>
             <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={closeSave}>

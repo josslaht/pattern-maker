@@ -12,9 +12,13 @@
 }
 
 html,
-body,
-#root {
+body {
   height: 100%;
+}
+
+/* Tracks the visible area as the browser's bars come and go */
+#root {
+  height: 100dvh;
 }
 
 body {
@@ -26,6 +30,31 @@ html,
 body {
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+/* Each control has its own press feedback, so the browser's grey tap flash only fights it */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* No double-tap zoom wait, and a long press doesn't select a label or pop the callout */
+button,
+a,
+[role='button'] {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Safari zooms into any field under 16px and doesn't zoom back out. Unlayered, so it beats text-sm. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }
 
 @theme inline {

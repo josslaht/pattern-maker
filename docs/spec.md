@@ -182,7 +182,7 @@ There is one canvas with two zoom levels, Tile and Pattern. Moving between them 
 - The pattern fills the view, with no output frame and no fade. The same camera zooms out from the tile.
 - The bar at the bottom holds Shift, Turn, Alternate colours and Hide some tiles.
 
-**Moving between them.** Tapping Space switches views. Holding it hides the bars and shows the pattern with nothing in front of it, from either view.
+**Moving between them.** Tapping Space switches views. Holding it hides the bars and shows the pattern with nothing in front of it, from either view. On touch, a tap on the canvas does the same: beside the tile in the Tile view (once nothing is selected) and anywhere in the Pattern view. Holding a finger anywhere on the canvas is holding Space.
 
 **Save view.** Save opens a view of its own over the whole window, header included, where everything about the file is chosen. The design doesn't change here.
 
@@ -231,7 +231,7 @@ Every tool is there and usable from the start. Nothing is revealed bit by bit, a
 | --- | --- |
 | Drag in a shape, or try a different layout from Tile. | Until a shape or the layout changes |
 | Pick a colour to paint it, or try out different palettes from Moods. | Until any colour changes. It comes first while something is selected |
-| Tap Space or use the buttons above to see the whole pattern. Or hold Space to preview it. (Only the buttons on touch) | Once both of the above are done, or after a few changes of any kind, until the Pattern view is visited |
+| Tap Space or use the buttons above to see the whole pattern. Or hold Space to preview it. (On touch: Tap beside the tile or use the buttons above to see the whole pattern. Or hold a finger down to preview it.) | Once both of the above are done, or after a few changes of any kind, until the Pattern view is visited |
 | Play around with the options below to change how the pattern repeats. | In the Pattern view, until anything about the repeat changes |
 | Press Save to download your pattern when you're done. | Under the Save button, in either view, once the repeat has changed. It goes when Save is opened (saved or not), or after a few more changes |
 
