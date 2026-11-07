@@ -1,6 +1,6 @@
 # Pattern maker
 
-A small web app for making repeating patterns out of simple shapes. It's meant for people who have never made a pattern and don't know the vocabulary.
+A small web app for making repeating patterns out of simple shapes.
 
 Live at [laht.design/pattern-maker](https://laht.design/pattern-maker).
 
