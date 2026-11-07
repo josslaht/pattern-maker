@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/pattern-maker/", "destination": "/" },
+    { "source": "/pattern-maker/:path*", "destination": "/:path*" }
+  ]
+}
